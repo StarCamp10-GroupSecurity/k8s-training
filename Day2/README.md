@@ -132,7 +132,7 @@ spec:
 
 Then we will the command `kubectl get events --watch` to see all the events and finalize the workflow
 
-[Workflow after running kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/workflow.png)
+![Workflow after running kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/workflow.png)
 
 
 <!-- Below is the workflow when you perform creating a new deployment with `kubectl apply -f deployment.yaml`
