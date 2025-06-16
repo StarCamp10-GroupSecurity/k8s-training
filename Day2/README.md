@@ -52,3 +52,89 @@ This component is the heart of the system. Other components or client will inter
 When using `kubectl`, we actually send a HTTP Request to the API Server. Also, API Server will perform the authentication checking.
 
 ![Working with kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/kubectl-work.png)
+
+## Controller Manager
+
+Controller will listen the request from the API Server and perform the action such as: create, read, update, and delte (CRUD)
+
+There are some controllers that we need to know:
+- Deployment controller
+- Replicatioon Controller
+- StatefulSet Controller
+- etc.?
+
+Examples of controllers include the Deployment controller, which creates new Pods based on a Deployment object’s spec, and the CronJob controller, which enables periodic creation of new Jobs.
+
+
+
+## Scheduler
+
+This component will decide which worker node will run the pods. It sounds very simple but it actually performs some complex algorithm to choose the most suitable worker node to run a pod.
+
+Scheduler will listen the request from API Server: After **API Server** save a new pod in **etcd** but there is **no node attribute**, Scheduler will choose the worker node and **update the node attribute in etcd via API Server**.
+
+# Elaboration on Worker node(s)
+
+## Kubelet
+
+In worker node, this is the component interacting with the master node(s). 
+
+When we first join the worker node within the master node, kubelet will send a POST Request to the API Server to create a node resource.
+
+If it receives a request from the API Server about creating a pod, it will create a container with the according container runtime.
+
+## Kube proxy
+
+As we know, the `service` has an endpoint, it will forward a traffic to pods. `Kube proxy` will handle the netwrok part so that a request can be forwarded to a pod
+
+
+# Sample workflow creating a Nginx Deployment
+
+We have a Nginx Deployment with Service as the file below:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: nginx # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: nginx # label value
+    spec:
+      containers:
+      - image: nginx:1.14.2 # image used to run container
+        name: nginx # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
+```
+
+Then we will the command `kubectl get events --watch` to see all the events and finalize the workflow
+
+[Workflow after running kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/workflow.png)
+
+
+<!-- Below is the workflow when you perform creating a new deployment with `kubectl apply -f deployment.yaml`
+
+!!!![Working with kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/kubectl-work.png) -->
