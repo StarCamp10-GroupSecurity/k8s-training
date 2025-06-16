@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+  labels:
+    app: httpd
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:alpine3.22 # image used to run container
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container

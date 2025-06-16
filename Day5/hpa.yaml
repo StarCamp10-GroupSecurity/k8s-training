@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+  labels:
+    app: httpd
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:alpine3.22 # image used to run container
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-service
+  labels:
+    app: httpd
+spec:
+  type: ClusterIP
+  selector:
+    app: httpd
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: httpd-hpa
+  namespace: hpa  # Change if your deployment is in a different namespace
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: httpd-deployment
+  minReplicas: 3
+  maxReplicas: 6
+  # targetCPUUtilizationPercentage: 50  # Target CPU utilization percentage
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

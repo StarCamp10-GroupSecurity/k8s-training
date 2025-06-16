@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+  labels:
+    app: httpd
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: nginx:1.14.2 # image used to run container
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+        livenessProbe:
+          httpGet:
+            path: /                   # Endpoint to check
+            port: 80                  # Port to access
+          initialDelaySeconds: 30     # Wait 30 seconds before starting checks
+          periodSeconds: 10            # Check every 10 seconds
+          failureThreshold: 3          # Restart after 3 failures
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3

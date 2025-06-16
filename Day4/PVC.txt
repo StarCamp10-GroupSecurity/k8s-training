@@ -1,0 +1,31 @@
+Volume hiểu đơn giản chỉ là một mount point từ hệ thống file của server vào bên trong container.
+
+Tại sao ta cần volume thì đối với container, những thứ ta ghi vào filesystem của nó thì chỉ tồn tại khi container còn chạy. Khi một thằng Pod bị xóa và tạo lại, container mới sẽ được tao ra, lúc này thì những thứ ta ghi ở container trước sẽ bị mất đi.
+
+Trong kubernetes thì sẽ có những loại volume như sau:
+
++ emptyDir
++ hostPath
++ gitRepo
++ nfs
++ gcePersistentDisk, awsElasticBlockStore, azureDisk (cloud storage)
+
+Những loại volume trên được phân chia thành 3 dạng chính:
+
++ Volume dùng để chia sẻ dữ liệu giữa các container trong Pod
++ Volume đính kèm vào trong filesystem một node
++ Volume đính kèm vào cluster và các node khác nhau có thể truy cập
+
+Ta chỉ cần nhớ một vài loại hay sử dụng nhất là emptyDir, hostPath, cloud storage, PersistentVolumeClaim.
+
+emptyDir: sharing forlder between containers inside a pod.
+hostPath: 
+    hostPath là loại volume sẽ tạo một mount point từ Pod ra ngoài filesystem của node. Đây là loại volume đầu tiên ta nói mà có thể dùng để lưu trữ persistent data. Dữ liệu lưu trong volume này chỉ tồn tại trên một worker node và sẽ không bị xóa đi khi Pod bị xóa.
+
+    Đối với loại volume này thì Pod của ta cần phải được tạo đúng worker node thì ta mới có được dữ liệu trước đó, nếu Pod của ta được tạo ở một worker node khác thì khi đó Pod sẽ không có dữ liệu cũ, do dữ liệu vẫn nằm ở worker node cũ. 
+
+PersistentVolumes sẽ không thuộc về bất kì namespace nào.
+
+giả sử một cluster có một PV (10Gi), nhưng có một PVC request 20Gi, chuyện gì xảy ra -> pvc sẽ có status là pending
+
+To ensure that each Persistent Volume Claim (PVC) is bound to a specific Persistent Volume (PV) in Kubernetes, you can use the selector field in your PVC definitions to specify the PVs you want them to bind to. Here’s how to do it:

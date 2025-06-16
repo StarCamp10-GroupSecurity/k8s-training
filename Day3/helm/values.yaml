@@ -1,0 +1,22 @@
+replicaCount: 3
+
+image:
+  name: httpd
+  repository: httpd
+  tag: alpine3.22
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+configMapName: my-config-map
+
+configMap:
+  appEnv: production
+
+secretName: my-secret
+
+secret:
+  mySecret: dGhpc2lzYXNlY3JldA== # thisisasecret

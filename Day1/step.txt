@@ -1,0 +1,2 @@
+add ubuntu user to docker group (since I loggin as Ubuntu user)
+sudo usermod -aG docker ubuntu

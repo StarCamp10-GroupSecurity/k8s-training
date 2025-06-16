@@ -1,0 +1,18 @@
+// Deploy a WordPress chart using helm install my-wp bitnami/wordpress --namespace my-app.
+kind create cluster --name mycluster
+
+kubectl create namespace my-app
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm install wordpress bitnami/wordpress -n my-app
+
+
+// Migrate
+helm install tamvo ./ --namespace my-app --create-namespace
+
+// push dockerhub
+helm package .
+helm push day2-0.1.0.tgz oci://registry-1.docker.io/heyyytamvo
+
+// pull 
+helm install testpull oci://registry-1.docker.io/heyyytamvo/day2 --version 0.1.0

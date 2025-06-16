@@ -1,0 +1,7 @@
+*.tf
+*.pem
+*.pub
+.terraform.lock.hcl
+.terraform
+key.txt
+terraform.*

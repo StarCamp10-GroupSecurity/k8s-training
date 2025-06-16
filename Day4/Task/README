@@ -1,0 +1,1 @@
+This file is for learning pvc and pv. There are two worker node, but this config file makes sure that a pod is deployed within a specific worker node to bind the volume.

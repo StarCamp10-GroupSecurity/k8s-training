@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels: {{ include "common.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: {{ include "common.labels" . | indent 6 }}
+  template:
+    metadata:
+      labels: {{ include "common.labels" . | indent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.image.name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        # Uncomment the following section if needed
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.configMapName }}
+        - secretRef:
+            name: {{ .Values.secretName }}

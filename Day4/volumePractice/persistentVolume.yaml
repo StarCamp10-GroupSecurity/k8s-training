@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-pv
+spec:
+  capacity:
+    storage: 2Gi # size of the storage
+  accessModes: # access mode
+    - ReadWriteMany # can be mounted by a single wokrer node for reading and writing
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-pvc
+spec:
+  accessModes:
+    - ReadWriteMany # Change this to match the PV's access mode
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+    - image: nginx:1.14.2
+      name: nginx-pod
+      volumeMounts:
+        - name: nginx-data
+          mountPath: /usr/share/nginx/html
+      ports:
+        - containerPort: 80
+          protocol: TCP
+  volumes:
+    - name: nginx-data
+      persistentVolumeClaim:
+        claimName: nginx-pvc 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
