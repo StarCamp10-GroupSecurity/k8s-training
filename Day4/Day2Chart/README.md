@@ -1,10 +1,12 @@
 # Instruction
 
 ## Requirements
+```
 Install Nginx Ingress Controller via Helm: helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx.
 Create an Ingress rule to route /app to the Day 2 S ervice. Example: ingress.yaml with kind: Ingress, spec.rules.path: /app.
 Test with kubectl port-forward svc/ingress-nginx-controller 8080:80 and curl localhost:8080/app.
 Package the chart, release new version, push to the registry
+```
 
 ## Init the Helm Chart
 
