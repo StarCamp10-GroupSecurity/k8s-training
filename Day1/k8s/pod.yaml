@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpd-pod
+  labels:
+    app: httpd
+spec:
+  containers:
+  - image: nginx:1.14.2  # Image used to run the container
+    name: httpd          # Name of the container
+    ports:
+      - containerPort: 80 # Port exposed by the container
