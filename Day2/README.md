@@ -130,11 +130,25 @@ spec:
     targetPort: 80
 ```
 
-Then we will the command `kubectl get events --watch` to see all the events and finalize the workflow
+Then we will the command `kubectl get events --watch --sort-by='.lastTimestamp'` to see all the events and finalize the workflow
 
 ![Workflow after running kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/workflow.png)
 
 
-<!-- Below is the workflow when you perform creating a new deployment with `kubectl apply -f deployment.yaml`
+So, here is the workflow:
 
-!!!![Working with kubectl](https://cyberdevops.s3.us-east-1.amazonaws.com/kubectl-work.png) -->
+1. client perform `kubectl apply -f deployment.yaml`
+2. `kubectl` will send a POST request to the API Server
+3. `API Server` validate the configuration, if it is valid, it will save all resources in `etcd`
+4. `API Server` send a request to the Deployment Controller
+5. Deployment Controller receives the config files, it will find the field `template ReplicaSet` and send request to `ReplicaSet controller`
+6. `ReplicaSet controller` receives the message and make the request to the `API Server` to create pods
+7. `API Server` save the Pod resource to `etcd` and send a request to `Scheduler`
+8. `Scheduler` picks the worker node to create pods and let the `API Server` know which worker node
+9. `API Server` will send the request to `kubelet` in a Worker Node to create container.
+10. `API Server` update the the information of pods in `etcd`
+
+
+
+# Preferences
+1. [Kubernetes Series - Bài 11 - Kubernetes internals architecture](https://viblo.asia/p/kubernetes-series-bai-11-kubernetes-internals-architecture-L4x5xPjb5BM)
