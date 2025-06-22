@@ -12,6 +12,9 @@ Prepare an EC2 for infrastructure. Your K8s cluster will be deployed on this EC2
 ```sh
 kubectl apply -f delegate.yaml -n harness-delegate-ng
 ```
+3. Create a K8s connector
+
+![Create a K8s Connector](https://cyberdevops.s3.us-east-1.amazonaws.com/k8s-connector.png)
 
 ## Setup Docker Delegate (Optional)
 
