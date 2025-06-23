@@ -140,13 +140,14 @@ So, here is the workflow:
 1. client perform `kubectl apply -f deployment.yaml`
 2. `kubectl` will send a POST request to the API Server
 3. `API Server` validate the configuration, if it is valid, it will save all resources in `etcd`
-4. `API Server` send a request to the Deployment Controller
-5. Deployment Controller receives the config files, it will find the field `template ReplicaSet` and send request to `ReplicaSet controller`
-6. `ReplicaSet controller` receives the message and make the request to the `API Server` to create pods
-7. `API Server` save the Pod resource to `etcd` and send a request to `Scheduler`
-8. `Scheduler` picks the worker node to create pods and let the `API Server` know which worker node
-9. `API Server` will send the request to `kubelet` in a Worker Node to create container.
-10. `API Server` update the the information of pods in `etcd`
+4. `Controller Controller` know its task to deploy a Deployment by invoking request to `API Server`
+5. `Deployment Controller` receives the request to deploy a deployemnt from `Controller Manager`
+6. `Deployment Controller` receives the config information, it will find the field `template ReplicaSet` and send request to `ReplicaSet Controller`
+7. `ReplicaSet controller` receives the message and make the request to the `API Server` to create pods in `etcd`
+8. `API Server` save the Pod resource to `etcd` and send a request to, `Scheduler` know a pod is saved to `etcd` (via `API Server`), now it is its job to choose a worker node to deploy the pod.
+9. `Scheduler` picks the worker node to create pods and let the `API Server` know which worker node
+10. `kubelet` in a Worker Node knows its job (via `API Server`) to deploy a pod  to create container.
+11. `API Server` update the the information of pods in `etcd`
 
 
 
