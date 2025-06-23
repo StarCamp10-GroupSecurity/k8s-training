@@ -42,6 +42,28 @@ Please refer to Day 2 to see more details and how do they communicate to each ot
 
 #### Pods
 
+The basic component of the kubernetes cluster is a pod. A pod can contains 1 or more containers. But usually, they deploy 1 container per pod. 
+
+Remember, pod is **ephemeral**, which means that it can die and re-deploy. Every pod has an IP. Because it is ephemeral, so the IP address changes through time. That's why we can't use IP to communicate between pods.
+
+Please refer to this picture for the sample demonstration:
+
+![K8s Pods](https://cyberdevops.s3.us-east-1.amazonaws.com/pods.png)
+
+Below is a simple `yaml` file to deploy a nginx pod:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: httpd-pod
+spec:
+  containers:
+  - image: nginx:1.14.2  # Image used to run the container
+    name: httpd          # Name of the container
+    ports:
+      - containerPort: 80 # Port exposed by the container
+```
 #### ReplicaSet
 
 #### Deployment
