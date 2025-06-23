@@ -49,3 +49,11 @@ image:
 As you can see, it uses the variable in the pipeline. Go to the pipeline, setting up the `replica_count` variable as the picture below:
 
 ![Pipeline Variable](https://cyberdevops.s3.us-east-1.amazonaws.com/variable.png)
+
+### Modify the service to use the custom file
+
+Remember the service for this deployment in Harness? Go to its Configurations and add a new manifest `replica_values.yaml` as picture below:
+
+![Pipeline Variable](https://cyberdevops.s3.us-east-1.amazonaws.com/addManifest.png)
+
+Now, the CD Pipeline can work with the variable to manipulate the deployment.
