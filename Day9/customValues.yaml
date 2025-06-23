@@ -1,0 +1,5 @@
+replicaCount: <+pipeline.variables.replica_count>
+image:
+  registry: docker.io
+  repository: bitnami/nginx
+  tag: 1.28.0-debian-12-r3
