@@ -1,9 +1,23 @@
 # Learning Summary Kubernetes
 
 ## Table of Contents
-* [Kubernetes (K8s)](#kubernetes-k8s)
-  * [Why Kubernetes?](#why-kubernetes)
-  * [Kubernetes Architecture](#kubernetes-architecture)
+- [Learning Summary Kubernetes](#learning-summary-kubernetes)
+  - [Table of Contents](#table-of-contents)
+  - [Kubernetes (K8s)](#kubernetes-k8s)
+    - [Why Kubernetes?](#why-kubernetes)
+    - [Kubernetes Architecture](#kubernetes-architecture)
+      - [Master node(s)](#master-nodes)
+      - [Worker Node(s)](#worker-nodes)
+    - [Kubernetes Basic Component](#kubernetes-basic-component)
+      - [Pods](#pods)
+      - [ReplicaSet](#replicaset)
+      - [Deployment](#deployment)
+      - [Service](#service)
+      - [Config Map](#config-map)
+      - [Secret](#secret)
+  - [Elastic Kubernetes Service (EKS)](#elastic-kubernetes-service-eks)
+  - [Helm](#helm)
+  - [Harness](#harness)
 
 ## Kubernetes (K8s)
 
