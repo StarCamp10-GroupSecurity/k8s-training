@@ -16,8 +16,13 @@
       - [Config Map](#config-map)
       - [Secret](#secret)
   - [Elastic Kubernetes Service (EKS)](#elastic-kubernetes-service-eks)
+    - [EKS Architecture](#eks-architecture)
+    - [Problems](#problems)
+    - [EKS Price](#eks-price)
   - [Helm](#helm)
   - [Harness](#harness)
+- [References](#references)
+- [Preferences](#preferences)
 
 ## Kubernetes (K8s)
 
@@ -304,8 +309,44 @@ data:
 ```
 ## Elastic Kubernetes Service (EKS)
 
+Amazon Elastic Kubernetes Service (Amazon EKS) is a fully managed Kubernetes service that enables you to run Kubernetes seamlessly in both AWS Cloud and on-premises data centers.
 
+Instead of build a Kubernetes Cluster from scratch, you can use EKS and deploy your application. EKS will help you manage the Control Plane(s), you have many options to deploy the worker nodes.
 
++ **Self-Managed Nodes:** Customers can launch their own EC2 instances and configure them to run as Kubernetes nodes in an EKS cluster. Self-managed nodes give customers more control over the EC2 instances but require more management overhead.
+
++ **Managed Node Groups:** Customers can also create managed node groups using the EKS console, CLI, or API. Managed node groups automatically provision and manage EC2 instances that run as Kubernetes nodes in an EKS cluster. They provide a simplified and scalable way to manage nodes in the cluster.
+
+### EKS Architecture
+
+An EKS cluster consists of **two VPCs**: **one VPC managed by AWS that hosts the Kubernetes control plane** and **a second VPC managed by customers that hosts the Kubernetes worker nodes (EC2 instances)** where containers run, as well as other AWS infrastructure (like load balancers) used by the cluster. All worker nodes need the ability to connect to the managed API server endpoint. This connection allows the worker node to register itself with the Kubernetes control plane and to receive requests to run application pods.
+
+When you create a new EKS Cluster, there is an option: Choose the subnets in your VPC where the control plane may place elastic network interfaces (ENIs) to facilitate communication with your cluster. To create a new subnet, go to the corresponding page in the VPC console .
+
+Below is the picture showing the option choosing subnet for placing ENI:
+
+![Choosing subnet to place ENI](https://cyberdevops.s3.us-east-1.amazonaws.com/ChooseSubnets.png)
+
+When we provision the EKS Control Plane and Worker Node, below is the architecture:
+
+![High Level EKS Architecture](https://cyberdevops.s3.us-east-1.amazonaws.com/EasyEKSArchitect.png)
+
+The order of operations for a worker node to come online and start receiving commands from the control plane is:
+
+1. EC2 instance starts. Kubelet and the Kubernetes node agent are started as part of the boot process on each instance.
+2. Kubelet reaches out to the Kubernetes cluster endpoint to register the node. It connects to the public endpoint outside of the VPC or to the private endpoint within the VPC.
+3. Kubelet receives API commands and sends regular status and heartbeats to the endpoint. When you query the API server (kubectl get nodes), you see the latest status that each node’s Kubelet has reported back to the API server.
+
+### Problems
+
+### EKS Price
 ## Helm 
 
 ## Harness
+
+
+# References
+
+
+# Preferences
+1. [De-mystifying cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
