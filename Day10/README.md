@@ -66,6 +66,34 @@ spec:
 ```
 #### ReplicaSet
 
+Now, if we would like to create multiple pods, we can use Replica Set to deploy as the `yaml` file below
+
+```yaml
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: httpd-rc
+spec:
+  replicas: 3 # number of the pod
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: nginx:1.14.2 # image used to run container
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+```
+
+With the config file above, you can create 3 pods and it will **make sure **that there are always 3 pods running in your kubernetes cluster.
+
+The keyword is **make sure**. If one pod fails, the Replica Controller will restart it and make sure you have 3 healthy pods running.
+
+Below is a the picture showing that a ReplicaSet will make sure there is 3 pods.
+
+![K8s Pods](https://cyberdevops.s3.us-east-1.amazonaws.com/ReplicaSet.png)
 #### Deployment
 
 #### Service
