@@ -21,7 +21,6 @@
     - [EKS Price](#eks-price)
   - [Helm](#helm)
   - [Harness](#harness)
-- [References](#references)
 - [Preferences](#preferences)
 
 ## Kubernetes (K8s)
@@ -337,16 +336,15 @@ The order of operations for a worker node to come online and start receiving com
 2. Kubelet reaches out to the Kubernetes cluster endpoint to register the node. It connects to the public endpoint outside of the VPC or to the private endpoint within the VPC.
 3. Kubelet receives API commands and sends regular status and heartbeats to the endpoint. When you query the API server (kubectl get nodes), you see the latest status that each node’s Kubelet has reported back to the API server.
 
-### Problems
+**Note**: Traffic from the private worker node to the AWS Control Plane is the private backbone, which means that it does not internet to communicate.
 
+### Problems
+1. When you launch your worker node (Node Group) in the private subnet, make sure that it can access the internet to download all the setup packages, connect to public registry such as Dockerhub
+2. Normally, the IP address of the Kubernetes Cluster is different from the host. But in EKS, by default, EKS uses Amazon VPC CNI, it will assign an IP Adress (from Primary Subnet) to the pods. We have the problem of running out IP Address. Please refer to this [link](https://viblo.asia/p/giai-phap-cho-aws-eks-thieu-dia-chi-ipv4-hon-khat-nuoc-BQyJK3AMJMe)
 ### EKS Price
 ## Helm 
 
 ## Harness
-
-
-# References
-
 
 # Preferences
 1. [De-mystifying cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
