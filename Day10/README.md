@@ -171,6 +171,75 @@ spec:
 ```
 #### Config Map
 
+ConfigMaps are used to store non-sensitive configuration data in key-value pairs. This can include application settings, environment variables, command-line arguments, or configuration files.
+
+Below is the a deployment without using config map. When everything is deployed successfully, you will exec to the pods and see the expected environment variable.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:1.14.2 # new image used to run container: httpd instead of nginx
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+        env:
+        - name: SENSITIVE_VARIABLE
+          value: thisisasecret
+```
+
+If you use config map, there will be 2 files.
+
+`deployment.yaml`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:1.14.2 # new image used to run container: httpd instead of nginx
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+        envFrom:
+        - configMapRef:
+            name: sensitive-config
+        # env:
+        # - name: SENSITIVE_VARIABLE
+        #   value: thisisasecret
+```
+
+`config_map.yaml`
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sensitive-config
+data:
+  SENSITIVE_VARIABLE: thisisasecret
+```
 #### Secret
 
 #### Persistent Volume and Persistent Volume Claim
