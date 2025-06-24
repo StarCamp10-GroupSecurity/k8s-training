@@ -93,9 +93,45 @@ The keyword is **make sure**. If one pod fails, the Replica Controller will rest
 
 Below is a the picture showing that a ReplicaSet will make sure there is 3 pods.
 
-![K8s Pods](https://cyberdevops.s3.us-east-1.amazonaws.com/ReplicaSet.png)
+![K8s ReplicaSet](https://cyberdevops.s3.us-east-1.amazonaws.com/ReplicaSet.png)
 #### Deployment
 
+A Deployment provides declarative updates for Pods and ReplicaSets.
+
+You describe a desired state in a Deployment, and the **Deployment Controller** changes the actual state to the desired state at a controlled rate.
+
+When you create a new deployment, it will create a new ReplicaSet. There are some updating methods:
+
++ Rolling Update
++ Recreate
+
+Below is the deployment with a new image version:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:1.14.2 # new image used to run container: httpd instead of nginx
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+```
+
+Below is the picture of a deployment (updating from nginx to httpd):
+
+![K8s Deployment](https://cyberdevops.s3.us-east-1.amazonaws.com/Deployment.png)
 #### Service
 
 #### Config Map
