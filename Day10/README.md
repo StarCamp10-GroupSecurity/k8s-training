@@ -145,6 +145,30 @@ curl http://serviceA
 It will receive the response from 1 of 3 red pods. Traffic will be distributed to 1 of three red pods via Service A. The componet helping it is the `kube-proxy`.
 
 ![K8s Service](https://cyberdevops.s3.us-east-1.amazonaws.com/Service.png)
+
+There are three kind of service:
+
++ Cluster IP
++ Node Port
++ Load Balancer (Just support in the cloud environment: EKS, AKS, GKE, etc.)
+
+Node Port and Cluster IP is the same, but for the service Node Port, you specify the port of the Node manually.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-service
+  labels:
+    app: httpd  # Service will be forward to all pods with label of `app: httpd`
+spec:
+  type: ClusterIP
+  selector:
+    app: httpd
+  ports:
+  - port: 80    # port of the service
+    targetPort: 80   # port of container
+```
 #### Config Map
 
 #### Secret
