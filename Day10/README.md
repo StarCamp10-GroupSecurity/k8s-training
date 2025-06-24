@@ -17,6 +17,9 @@
       - [Secret](#secret)
   - [Elastic Kubernetes Service (EKS)](#elastic-kubernetes-service-eks)
     - [EKS Architecture](#eks-architecture)
+    - [Client Connection](#client-connection)
+      - [Public Endpoint Access](#public-endpoint-access)
+      - [Private Endpoint Access](#private-endpoint-access)
     - [Problems](#problems)
     - [EKS Price](#eks-price)
   - [Helm](#helm)
@@ -336,7 +339,23 @@ The order of operations for a worker node to come online and start receiving com
 2. Kubelet reaches out to the Kubernetes cluster endpoint to register the node. It connects to the public endpoint outside of the VPC or to the private endpoint within the VPC.
 3. Kubelet receives API commands and sends regular status and heartbeats to the endpoint. When you query the API server (kubectl get nodes), you see the latest status that each node’s Kubelet has reported back to the API server.
 
-**Note**: Traffic from the private worker node to the AWS Control Plane is the private backbone, which means that it does not internet to communicate.
+**Note**: Traffic from the private worker node to the AWS Control Plane is the private backbone, which means that it does not internet to communicate???? (Need to confirm or hands-on)
+
+### Client Connection
+
+When creating a new Kubernetes Cluster, we have some options for Cluster Endpoint Access:
+
++ Public
++ Private
++ Public and Private
+
+#### Public Endpoint Access
+
+![Public Endpoint](https://cyberdevops.s3.us-east-1.amazonaws.com/endpoint_public.png)
+
+#### Private Endpoint Access
+
+![Private Endpoint](https://cyberdevops.s3.us-east-1.amazonaws.com/endpoint_private.png)
 
 ### Problems
 1. When you launch your worker node (Node Group) in the private subnet, make sure that it can access the internet to download all the setup packages, connect to public registry such as Dockerhub
