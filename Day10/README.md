@@ -134,6 +134,17 @@ Below is the picture of a deployment (updating from nginx to httpd):
 ![K8s Deployment](https://cyberdevops.s3.us-east-1.amazonaws.com/Deployment.png)
 #### Service
 
+As we know, pods are *ephemeral*, which means that its IP Address changes if a new pod is deployed. Therefore, we will use Service to communicate between Pods and Pods or Client and Pods.
+
+For example, if you are in the green pod and execute this command line:
+
+```sh
+curl http://serviceA
+```
+
+It will receive the response from 1 of 3 red pods. Traffic will be distributed to 1 of three red pods via Service A. The componet helping it is the `kube-proxy`.
+
+![K8s Service](https://cyberdevops.s3.us-east-1.amazonaws.com/Service.png)
 #### Config Map
 
 #### Secret
