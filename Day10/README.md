@@ -283,9 +283,9 @@ type: Opaque
 data:
   SENSITIVE_VARIABLE: dGhpc2lzYXNlY3JldA==
 ```
-#### Persistent Volume and Persistent Volume Claim
-
 ## Elastic Kubernetes Service (EKS)
+
+
 
 ## Helm 
 
