@@ -242,6 +242,47 @@ data:
 ```
 #### Secret
 
+With the case of storing sensitive information above, we can use *Secret* to encode the sensitive information.
+
+`deployment.yaml`
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deployment
+spec:
+  replicas: 3 # number of the pod
+  selector: 
+    matchLabels:
+      app: httpd # label value
+  template: # pod template
+    metadata:
+      labels:
+        app: httpd # label value
+    spec:
+      containers:
+      - image: httpd:1.14.2 # new image used to run container: httpd instead of nginx
+        name: httpd # name of the container
+        ports:
+          - containerPort: 80 # pod of the container
+        envFrom:
+        - secretRef:
+            name: sensitive-secret
+        # env:
+        # - name: SENSITIVE_VARIABLE
+        #   value: thisisasecret
+```
+
+`secrets.yaml`
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sensitive-secret
+type: Opaque
+data:
+  SENSITIVE_VARIABLE: dGhpc2lzYXNlY3JldA==
+```
 #### Persistent Volume and Persistent Volume Claim
 
 ## Elastic Kubernetes Service (EKS)
