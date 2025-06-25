@@ -22,8 +22,6 @@
       - [Private Endpoint Access](#private-endpoint-access)
     - [Problems](#problems)
     - [EKS Price](#eks-price)
-  - [Helm](#helm)
-  - [Harness](#harness)
 - [Preferences](#preferences)
 
 ## Kubernetes (K8s)
@@ -361,9 +359,14 @@ When creating a new Kubernetes Cluster, we have some options for Cluster Endpoin
 1. When you launch your worker node (Node Group) in the private subnet, make sure that it can access the internet to download all the setup packages, connect to public registry such as Dockerhub
 2. Normally, the IP address of the Kubernetes Cluster is different from the host. But in EKS, by default, EKS uses Amazon VPC CNI, it will assign an IP Adress (from Primary Subnet) to the pods. We have the problem of running out IP Address. Please refer to this [link](https://viblo.asia/p/giai-phap-cho-aws-eks-thieu-dia-chi-ipv4-hon-khat-nuoc-BQyJK3AMJMe)
 ### EKS Price
-## Helm 
 
-## Harness
+| Kubernetes Version Support Tier	 | Pricing |  
+|----------|----------|----------|
+| Standard Kubernetes version support    | 	$0.10 per cluster per hour   |
+| Extended Kubernetes version support    | $0.60 per cluster per hour   |
+
+You also pay for the EC2 Instance (as a worker node). Please refer to this [link](https://aws.amazon.com/ec2/pricing/on-demand/) to see the plan for each type of instance.
 
 # Preferences
 1. [De-mystifying cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
+2. [Amazon EKS pricing](https://aws.amazon.com/eks/pricing/)
