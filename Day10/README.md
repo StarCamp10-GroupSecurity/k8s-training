@@ -361,7 +361,7 @@ When creating a new Kubernetes Cluster, we have some options for Cluster Endpoin
 ### EKS Price
 
 | Kubernetes Version Support Tier	 | Pricing |  
-|----------|----------|----------|
+|----------|----------|
 | Standard Kubernetes version support    | 	$0.10 per cluster per hour   |
 | Extended Kubernetes version support    | $0.60 per cluster per hour   |
 
