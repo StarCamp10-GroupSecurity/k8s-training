@@ -22,6 +22,13 @@
       - [Private Endpoint Access](#private-endpoint-access)
     - [Problems](#problems)
     - [EKS Price](#eks-price)
+  - [Harness](#harness)
+    - [Setup K8s Delegate (This is a part of CI Pipeline)](#setup-k8s-delegate-this-is-a-part-of-ci-pipeline)
+    - [Setup Docker Delegate (Optional)](#setup-docker-delegate-optional)
+    - [Create a CD Module in Harness](#create-a-cd-module-in-harness)
+      - [Create a service](#create-a-service)
+      - [Create environment](#create-environment)
+      - [Configure the CD Pipline with the Service and Environment above](#configure-the-cd-pipline-with-the-service-and-environment-above)
 - [Preferences](#preferences)
 
 ## Kubernetes (K8s)
@@ -366,6 +373,78 @@ When creating a new Kubernetes Cluster, we have some options for Cluster Endpoin
 | Extended Kubernetes version support    | $0.60 per cluster per hour   |
 
 You also pay for the EC2 Instance (as a worker node). Please refer to this [link](https://aws.amazon.com/ec2/pricing/on-demand/) to see the plan for each type of instance.
+
+## Harness
+
+Prepare an EC2 for infrastructure. Your K8s cluster will be deployed on this EC2.
+
+### Setup K8s Delegate (This is a part of CI Pipeline)
+
+1. Make sure you have a K8s Cluster in the machine
+2. Install a Harness Delegate in the Kind cluster
+
+```sh
+kubectl apply -f delegate.yaml -n harness-delegate-ng
+```
+3. Create a K8s connector
+
+![Create a K8s Connector](https://cyberdevops.s3.us-east-1.amazonaws.com/k8s-connector.png)
+
+### Setup Docker Delegate (Optional)
+
+Refer to `harness/pool.yaml`, prepare an EC2, modify the security group ID and your subnet ID. Then, execute this command line
+
+```
+docker run -d -v /runner:/runner -p 3000:3000 drone/drone-runner-aws:latest  delegate --pool /runner/pool.yaml
+```
+
+Then, execute the command line below to run the Docker Delegate
+
+
+```sh
+docker run -d --cpus=1 --memory=2g --network host \
+  -e DELEGATE_NAME=docker-delegate \
+  -e NEXT_GEN="true" \
+  -e DELEGATE_TYPE="DOCKER" \
+  -e ACCOUNT_ID=WNy8fgXsSk2u8CRoTuwYSg \
+  -e DELEGATE_TOKEN=YWU3M2YxZGIxNGFkMjVkNTczODcyYzA2ZDU1YWZmY2I= \
+  -e DELEGATE_TAGS="" \
+  -e MANAGER_HOST_AND_PORT=https://app.harness.io us-docker.pkg.dev/gar-prod-setup/harness-public/harness/delegate:25.06.86100
+```
+
+From now on, you can set up the CI pipeline for the project.
+
+### Create a CD Module in Harness
+
+Navigating to the `Continuous Delivery & GitOps`, and create a CD Pipeline. Below is the picture of a CD Pipeline:
+
+![Create a K8s CD Pipeline](https://cyberdevops.s3.us-east-1.amazonaws.com/CDPipeline.png)
+
+#### Create a service
+
+A Harness service is what you're deploying.
+
+A service has a service definition that contains its configuration details. These include manifest configurations, artifact configurations, and service variables.
+
+In this case, we use Helm to deploy application, so please use Service Type with the `Manifest Details` as below:
+
+![Create a Service Manifest Details](https://cyberdevops.s3.us-east-1.amazonaws.com/ManifestDetails.png)
+
+#### Create environment
+
+Create the `Pre-Prod environment` as below:
+
+![Create a Pre-Prod environment](https://cyberdevops.s3.us-east-1.amazonaws.com/PreProd.png)
+
+#### Configure the CD Pipline with the Service and Environment above
+
+Create a Stage with the Deployment of `Native Helm` type.
+
+1. Select the Service that you created above
+2. Select the `Pre-Prod environment` above
+3. Below is the simple CD pipeline
+
+![Create a K8s CD Pipeline](https://cyberdevops.s3.us-east-1.amazonaws.com/CDPipeline.png)
 
 # Preferences
 1. [De-mystifying cluster networking for Amazon EKS worker nodes](https://aws.amazon.com/blogs/containers/de-mystifying-cluster-networking-for-amazon-eks-worker-nodes/)
