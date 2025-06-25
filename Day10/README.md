@@ -344,7 +344,7 @@ The order of operations for a worker node to come online and start receiving com
 2. Kubelet reaches out to the Kubernetes cluster endpoint to register the node. It connects to the public endpoint outside of the VPC or to the private endpoint within the VPC.
 3. Kubelet receives API commands and sends regular status and heartbeats to the endpoint. When you query the API server (kubectl get nodes), you see the latest status that each node’s Kubelet has reported back to the API server.
 
-**Note**: Traffic from the private worker node to the AWS Control Plane is the private backbone, which means that it does not internet to communicate???? (Need to confirm or hands-on)
+**Note**: Traffic from the private worker node to the AWS Control Plane is the private backbone, which means that it does not internet to communicate
 
 ### Client Connection
 
